@@ -28,6 +28,7 @@ app.set("views", "server/views");
 // routes
 require("./routes")(app);
 app.use(express.static("server/public"));
+app.use(express.static("/home/marif/Documents/yk-annot-test"));
 
 // run server
 const server = http.createServer(app).listen(cfg.port, () => {

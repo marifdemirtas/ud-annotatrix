@@ -29,9 +29,10 @@ function leftRoundedRect(x, y, width, height, radius) {
  * @param {Array} el array of nodes
  * @param {Array} heights heights of each node
  * @param {Integer} spacing how far nodes are apart
+ * @param {Corpus} corpus reference to corpus
  * @returns token number of root
  */
-function drawNodes(_g, el, heights, spacing) {
+function drawNodes(_g, el, heights, spacing, corpus=null) {
   let currentX = 200;
   let rootToken = null;
   el.forEach(d => {
@@ -112,7 +113,16 @@ function drawNodes(_g, el, heights, spacing) {
       .attr("x", rectWidth)
       .attr("width", tokenNumWidth)
       .attr("height", nodeHeight)
-      .style("overflow", "visible");
+      .style("overflow", "visible")
+      .on('click', () => {
+        if (corpus != null){
+          corpus.tiff_index = d.subId;
+          corpus.afterModifyMinorIndex();
+          console.log("Tiff index set to ", d.subId);
+        }
+        console.log("Token with id " + d.subId + " clicked.");
+      });
+
 
     tokenNumGroup
       .append("path")

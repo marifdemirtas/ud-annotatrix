@@ -73,7 +73,7 @@
 <dt><a href="#drawMouse">drawMouse(mouse)</a></dt>
 <dd><p>Draw mouse on the svg.</p>
 </dd>
-<dt><a href="#drawNodes">drawNodes(_g, el, heights, spacing)</a> ⇒</dt>
+<dt><a href="#drawNodes">drawNodes(_g, el, heights, spacing, corpus)</a> ⇒</dt>
 <dd><p>Draws the nodes on the svg.</p>
 </dd>
 <dt><a href="#bind">bind(eles)</a></dt>
@@ -200,6 +200,7 @@ Abstraction over the nx.Corpus to handle some extra metadata (filename, text
     * [.serialize()](#Corpus+serialize) ⇒ <code>Object</code>
     * [.convertTo(format)](#Corpus+convertTo) ⇒ <code>String</code>
     * [.afterModifyIndex()](#Corpus+afterModifyIndex)
+    * [.afterModifyMinorIndex()](#Corpus+afterModifyMinorIndex)
     * [.first()](#Corpus+first)
     * [.prev()](#Corpus+prev)
     * [.next()](#Corpus+next)
@@ -382,6 +383,12 @@ Get a representation of the current sentence in <format>, ignoring lossiness.
 ### corpus.afterModifyIndex()
 Helper function to handle broadcasting index modifications and hash updates.
  NB: internal only.
+
+**Kind**: instance method of [<code>Corpus</code>](#Corpus)  
+<a name="Corpus+afterModifyMinorIndex"></a>
+
+### corpus.afterModifyMinorIndex()
+Helper function to handle multipage tiffs
 
 **Kind**: instance method of [<code>Corpus</code>](#Corpus)  
 <a name="Corpus+first"></a>
@@ -1197,18 +1204,19 @@ Draw mouse on the svg.
 
 <a name="drawNodes"></a>
 
-## drawNodes(_g, el, heights, spacing) ⇒
+## drawNodes(_g, el, heights, spacing, corpus) ⇒
 Draws the nodes on the svg.
 
 **Kind**: global function  
 **Returns**: token number of root  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| _g | <code>g</code> | <g> element to draw on |
-| el | <code>Array</code> | array of nodes |
-| heights | <code>Array</code> | heights of each node |
-| spacing | <code>Integer</code> | how far nodes are apart |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| _g | <code>g</code> |  | <g> element to draw on |
+| el | <code>Array</code> |  | array of nodes |
+| heights | <code>Array</code> |  | heights of each node |
+| spacing | <code>Integer</code> |  | how far nodes are apart |
+| corpus | [<code>Corpus</code>](#Corpus) | <code></code> | reference to corpus |
 
 <a name="bind"></a>
 

@@ -14,6 +14,7 @@ function bind(graph) {
 }
 
 function run() {
+  console.log("How many times run is called");
   d3.select("#graph-svg").remove();
 
   zoom = d3
@@ -59,6 +60,7 @@ function run() {
 }
 
 function drawNodes() {
+
   let el = _graph.app.corpus.is_ltr ? _graph.eles : _graph.eles.reverse();
   // Heights of the nodes on the tree. 0 represents the top.
   let heights = [];
@@ -93,7 +95,7 @@ function drawNodes() {
     heights[i] = heightSpacing * heights[i];
   }
   console.log(heights);
-  utils.drawNodes(_g, el, heights, spacing);
+  utils.drawNodes(_g, el, heights, spacing, _graph.app.corpus);
 }
 
 /**
