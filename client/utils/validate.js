@@ -2,17 +2,29 @@
 
 const $ = require("jquery");
 const _ = require("underscore");
+const tag_names = require("../../tag_names.js")
+if (Object.keys(tag_names).length == 0)
+  tag_names = Object({
+    'DEPRELS': [
+      "next", "copy", "atch", "back"
+    ],
+    'POS': [
+      "HEAD", "INTER", "EMPTY"
+    ]
+  });
+console.log(tag_names);
 
-const U_DEPRELS = [
-  "acl",      "advcl",     "advmod", "amod",       "appos", "aux",      "case",      "cc",         "ccomp", "clf",
-  "compound", "conj",      "cop",    "csubj",      "dep",   "det",      "discourse", "dislocated", "expl",  "fixed",
-  "flat",     "goeswith",  "iobj",   "list",       "mark",  "nmod",     "nsubj",     "nummod",     "obj",   "obl",
-  "orphan",   "parataxis", "punct",  "reparandum", "root",  "vocative", "xcomp"
-];
-const U_POS = [
-  "ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "INTJ", "NOUN", "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM",
-  "VERB", "X"
-];
+const U_DEPRELS = tag_names.DEPRELS;
+  // "acl",      "advcl",     "advmod", "amod",       "appos", "aux",      "case",      "cc",         "ccomp", "clf",
+  // "compound", "conj",      "cop",    "csubj",      "dep",   "det",      "discourse", "dislocated", "expl",  "fixed",
+  // "flat",     "goeswith",  "iobj",   "list",       "mark",  "nmod",     "nsubj",     "nummod",     "obj",   "obl",
+  // "orphan",   "parataxis", "punct",  "reparandum", "root",  "vocative", "xcomp"
+// ];
+
+const U_POS = tag_names.POS;
+  // "ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "INTJ", "NOUN", "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM",
+  // "VERB", "X"
+// ];
 
 // TODO: Make this more clever, e.g. CCONJ can have a dependent in certain
 // circumstances, e.g. and / or

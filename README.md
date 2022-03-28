@@ -1,3 +1,6 @@
+# REMINDER
+For custom tags, modify `tag_names.js`.
+
 # UD Annotatrix
 
 UD Annotatrix: a simple, sleek, fast editor for Universal Dependencies treebanks.

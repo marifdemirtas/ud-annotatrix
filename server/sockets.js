@@ -130,7 +130,6 @@ module.exports = (sio, MemoryStore) => {
     socket.on("modify index", index => {
       // forward the data along to anyone else in this room
       const treebank = socket.request.treebank;
-      console.log(treebank);
       const room = rooms[treebank];
       const user = room.editUser(socket.request, {index: index});
 

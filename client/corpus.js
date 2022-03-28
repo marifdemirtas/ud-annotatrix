@@ -3,9 +3,6 @@
 const _ = require("underscore");
 const nx = require("notatrix");
 const utils = require("./utils");
-const https = require("http");
-const Tiff = require("tiff.js");
-
 
 // for when we're editing a corpus that isn't from /upload
 const default_filename = "ud-annotatrix-corpus";
@@ -67,8 +64,6 @@ class Corpus {
     // save a reference to the parent
     this.app = app;
 
-    this.tiff_index = 0;
-
     // get the nx.Corpus data structure (with some corpus-wide metadata)
     this._corpus = serial ? nx.Corpus.deserialize(serial) : new nx.Corpus();
     this._corpus._meta = _.defaults(this._corpus._meta, {
@@ -79,31 +74,12 @@ class Corpus {
 
     });
 
-    // make sure we always have at least one sentence
-    if (this._corpus.length === 0)
-      this.insertSentence(0, "", false);
     // add some metadata
     this._corpus._sentences.forEach((sent, i) => { sent._meta.format = detectFormat(sent.input); });
 
-    this._corpus._sentences.forEach((sent, i) => {
-      this._corpus._sentences[i]._page_link = null;
-      try {
-        let link = this._corpus._sentences[i].tokens[0]._misc[0];
-        this._corpus._sentences[i]._page_link = {
-          hostname: 'localhost',
-          port: 5316,
-          path: '/assets/' + link,
-          method: 'GET',
-          headers: {'Access-Control-Allow-Origin': '*'}
-        };
-        this._corpus._sentences[i]._page_cache = false;
-          
-      } catch (error) {
-        console.log("Error");        
-      }
-
-      });
-
+    // make sure we always have at least one sentence
+    if (this._corpus.length === 0)
+      this.insertSentence(0, "", false);
 
     // keep undo stack up to date
     this.app.undoer.current = this.serialize();
@@ -264,62 +240,14 @@ class Corpus {
     if (this.app.initialized) {
       this.app.gui.refresh();
       if (this.app.online) {
-        let page = this._corpus._sentences[this.index]._page_link;
-        this.tiff_index = 0;
-        if (!this._corpus._sentences[this.index]._page_cache){
-          const req = https.request(page, res => {
-            console.log(`statusCode: ${res.statusCode}`)
-            res.on('data', d => {
-              console.log("Data recieved: ", d);
-              console.log(this._corpus._sentences[this.index]._page_cache);
-              var image = new Tiff({ buffer: d });
-              this._corpus._sentences[this.index]._page_cache = image;
-              console.log('image' + ' width = ' + image.width() + ', height = ' + image.height());
-            })
-          })
-          
-          req.on('error', error => {
-            console.error(error)
-          })
-          
-          req.end();
-        } else {
-          console.log("Using cached");
-          console.log('image' + ' width = ' + this._corpus._sentences[this.index]._page_cache.width() + ', height = ' + this._corpus._sentences[this.index]._page_cache.height());
-          //$("#graph-viewer").append(this._corpus._sentences[this.index]._page_cache.toCanvas());
-        }
         this.app.socket.broadcast("modify index", this.index);
       }
     }
-
 
     // update the fragment identifier (the stuff after '#' in the url)
     if (utils.check_if_browser())
       setTimeout(() => { window.location.hash = (this.index + 1); }, 1000);
   }
-
-      /**
-     * Helper function to handle multipage tiffs
-     * 
-    */
-    afterModifyMinorIndex() {
-    if (this._corpus._sentences[this.index]._page_cache){
-      let tiff = this._corpus._sentences[this.index]._page_cache;
-      tiff.setDirectory(this.tiff_index);
-      let img = new Image;
-      img.src = tiff.toDataURL();
-
-      let my_width = 500;
-      img.onload = () => {
-        let canvas = $('#graph-viewer')[0];
-        var ctx = canvas.getContext('2d');
-        canvas.width = my_width;
-        canvas.height = Math.floor(my_width * img.height / img.width);
-        ctx.drawImage(img, 0, 0, my_width, Math.floor(my_width * img.height / img.width));
-      }
-    }
-  }
-  
 
   // ---------------------------------------------------------------------------
   // Wrappers for nx.Corpus methods

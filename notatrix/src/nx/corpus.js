@@ -280,7 +280,6 @@ class Corpus extends NxBaseClass {
   }
 
   readFile(filepath, next) {
-    console.log("Readfile called");
     fs.exists(filepath, exists => {
       if (!exists)
         throw new NxError(`cannot read file: cannot find path ${filepath}`);

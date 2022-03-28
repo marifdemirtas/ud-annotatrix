@@ -27,29 +27,6 @@ function bind(graph) {
  * subfunctions needed to generate the graph.
  */
 function run() {
-  let tiff;
-  try {
-    tiff = _graph.app.corpus._corpus._sentences[_graph.app.corpus._corpus.index]._page_cache;
-  } catch (error) {
-    tiff = false; 
-  }
-  if (tiff){
-    console.log("Will load page ", _graph.app.corpus.tiff_index);
-    var img = new Image;
-
-    img.src = tiff.toCanvas().toDataURL();
-
-    let canvas = $("#graph-viewer")[0];
-    let ctx = canvas.getContext("2d");
-    let my_width = 500;
-    img.onload = () => {
-      console.log("Loaded");
-      canvas.width = my_width;
-      canvas.height = Math.floor(my_width * img.height / img.width);
-      ctx.drawImage(img, 0, 0, my_width, Math.floor(my_width * img.height / img.width)); // Or at whatever offset you like
-    }
-  }
-
   d3.select("#graph-svg").remove();
   rootToken = null;
   // Create zoom object
@@ -93,7 +70,7 @@ function run() {
   for(let i = 0; i < _graph.numTokens; i++) {
     heights.push(yLevel);
   }
-  rootToken = utils.drawNodes(_g, el, heights, spacing, _graph.app.corpus);
+  rootToken = utils.drawNodes(_g, el, heights, spacing);
   drawDeprels();
   drawSuperTokens();
 
